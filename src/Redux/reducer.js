@@ -1,5 +1,6 @@
 import {
 
+  FILTEREDDATA,
   GET_BOOKS_FAILURE,
   GET_BOOKS_REQUEST,
   GET_BOOKS_SUCCESS,
@@ -27,6 +28,16 @@ export const reducer = (state = initialState, { type, payload }) => {
         isLoading: false,
         isError: false,
       };
+    }
+
+
+    case FILTEREDDATA:{
+      return {
+        ...state,
+        books: payload,
+        isLoading: false,
+        isError: false,
+      }
     }
     case GET_BOOKS_FAILURE: {
       return { ...state, isLoading: false, isError: true };

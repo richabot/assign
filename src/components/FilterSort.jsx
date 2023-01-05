@@ -1,9 +1,9 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import { getBooks } from "../Redux/action";
+import { getBooks, getfilter} from "../Redux/action";
 
 const FilterSort = () => {
   const dispatch = useDispatch();
@@ -11,53 +11,74 @@ const FilterSort = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  //const urlSort = searchParams.get("sortBy");
-  const urlCategory = searchParams.getAll("category");
-
-  //const [sortBy, setSortBy] = useState(urlSort || "");
-  const [category, setCategory] = useState(urlCategory || []);
-
+  const data = useSelector((state) => state.reducer.books);
+  const urldepartment = searchParams.getAll("department");
+  const urlocation = searchParams.getAll("location");
+  const [location,setLocation]=useState([])
+  const [department, setDepartment] = useState( []);
+  const [newdata,setNewdata]=useState(data)
   //filtering 
 
   const handleChange = (e) => {
-    
-    let newCategory = [...category];
+  
+   
+
+   
     const option = e.target.value;
 
-    //if option is already present then remove it else ppush it.
 
 
-if(newCategory.length>0){
-  newCategory = []
+if(e.target.id=="department")
+{
+  setDepartment(e.target.value)
+  
+
+}
+else if(e.target.id=="location")
+{
+  setLocation(e.target.value)
+  
 }
 
-    if (category.includes(option)) {
-      newCategory.splice(newCategory.indexOf(option), 1);
-    } else {
-      newCategory.push(option);
-    }
-    setCategory(newCategory);
+
   };
 
-  useEffect(() => {
-    console.log(category,"category")
-    if (category ) {
-      let params = {};
-      category && (params.category = category);
-     
-      setSearchParams(params);
-      // dispatch(getBooks({ params: { category } }));
-    }
-     // eslint-disable-next-line
-  }, [category, searchParams]);
+  const getfiltered=(params)=>{
+let tempDept = []
+ tempDept=data.filter((r)=>{
+  if(r.department){
 
-  //sorting
+    return  r.department?.title==params.dept 
+  }
+})
+console.log(tempDept,"filtwr")
+// dispatch(getfilter());
+
+dispatch(getfilter(tempDept))
+
+}
+
+
+
+
+  useEffect(() => {
+    
+    let params = {};
+department && (params.dept = department);
+location && (params.loc=location)
+console.log(params,"params")
+setSearchParams(params); 
+getfiltered(params)
+
+
+  }, [department, location,searchParams]);
+
  
   //reseting
   const handleReset = () => {
-    if (category) {
-     
-      setCategory([]);
+    if (department ) {
+      
+      setDepartment([]);
       dispatch(getBooks());
     }
   };
@@ -73,54 +94,10 @@ if(newCategory.length>0){
       }}
     >
       <h3>Filter</h3>
-      <div>
-        <div>
-          <input
-            type="checkbox"
-            value="5star"
-            checked={category.includes("5star")}
-            onChange={handleChange}
-          />
-          <label>5 star</label>
-        </div>
-        <div>
-          <input
-            type="checkbox"
-            value="4star"
-            checked={category.includes("4star")}
-            onChange={handleChange}
-          />
-          <label>4star</label>
-        </div>
-        <div>
-          <input
-            type="checkbox"
-            value="3star"
-            checked={category.includes("3star")}
-            onChange={handleChange}
-          />
-          <label>3star</label>
-        </div>
-        <div>
-          <input
-            type="checkbox"
-            value="2star"
-            checked={category.includes("2star")}
-            onChange={handleChange}
-          />
-        
-          <label>2 star</label>
-          
-        </div>
-        <div>
-          <input
-            type="checkbox"
-            value="1star"
-            checked={category.includes("1star")}
-            onChange={handleChange}
-          />
-          <label>1star</label>
-        </div>
+      <div> 
+       
+     
+       
       </div>
        
 
@@ -128,18 +105,26 @@ if(newCategory.length>0){
       <select
               name="location"
               id="location"
-              // value = {value}
+            
 
               onChange={handleChange}
-              
-             
             >
               <option value="">Select location</option>
               <option value="Verna">verna</option>
               <option value="Chicago">Chicago</option>
               <option value="margao">margao</option>
-          
-           
+            </select> 
+            <select
+              name="department"
+              id="department"
+             
+
+              onChange={handleChange}
+            >
+              <option value="">Select department</option>
+              <option value="Engineering">Engineering</option>
+              <option value="Human Resources">Human Resources</option>
+              <option value="Customer Success">Customer Success</option>
             </select> 
 
 
@@ -153,8 +138,6 @@ if(newCategory.length>0){
 
 
       
-   
-      <br />
       <div>
         <button onClick={handleReset}>Reset Filter</button>
       </div>

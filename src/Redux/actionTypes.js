@@ -8,3 +8,5 @@ export const UPDATE_BOOK_ERROR = "update/book/error";
 
 export const INCREASING_BOOKS = "increasing/books/order";
 export const DECREASING_BOOKS = "decreasing/books/order";
+ 
+export const FILTEREDDATA="./FILTER"

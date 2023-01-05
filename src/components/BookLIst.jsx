@@ -14,25 +14,14 @@ const BookLIst = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!data.length || location.search) {
-      const sortBy = searchParams.get("sortBy");
+   
 
-      const getBooksParams = {
-        params: {
-          category: searchParams.getAll("category"),
-          _sort: sortBy && "price",
-          _order: sortBy,
-        },
-      };
-      dispatch(getBooks(getBooksParams));
-
-      //if deselect all filter
-    } else if (location.search === "") {
+     if (location.search === "") {
       dispatch(getBooks());
     }
-     // eslint-disable-next-line
-  }, [location.search]);
-  console.log(data,"data")
+    
+  }, []);
+
 
   return (
     <div

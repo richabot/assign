@@ -1,5 +1,6 @@
 import {
  
+  FILTEREDDATA,
   GET_BOOKS_FAILURE,
   GET_BOOKS_REQUEST,
   GET_BOOKS_SUCCESS,
@@ -18,6 +19,12 @@ export const getBooks = (params) => (dispatch) => {
     .then((r) => dispatch({ type: GET_BOOKS_SUCCESS, payload: r.data }))
     .catch((err) => dispatch({ type: GET_BOOKS_FAILURE, payload: err }));
 };
+
+
+export const getfilter=(payload)=>(dispatch)=>(
+  
+  dispatch({type:FILTEREDDATA,payload})
+  )
 
 export const addBooksRequest = () => ({ type: UPDATE_BOOK_REQUEST });
 export const addBooksSuccess = (payload) => ({
